@@ -2,9 +2,8 @@ import numpy as np
 import random as rd
 import sys
 import datetime
+import pandas as pd
 
-N = 2
-tau = 0
 count = 10000
 
 def sign(a): 
@@ -12,13 +11,12 @@ def sign(a):
     return 1
 
 def decision_stump(d:list):
-    d.sort()
-    d_sort = d
+    d_sort = sorted(d, key=lambda l:l[0])
 
     theta = []
     theta.append(-1)
     for i in range(N-1):
-        tmp = (d_sort[i] + d_sort[i + 1])/2
+        tmp = (d_sort[i][0] + d_sort[i + 1][0])/2
         theta.append(tmp)
 
     E_in_list = []
@@ -29,8 +27,7 @@ def decision_stump(d:list):
             E_in_list_element.append(s)
             E_in = 0
             for d in d_sort:
-                err = sign(s * (d - th)) != sign(d)
-                if rd.random() < tau: err = not err
+                err = sign(s * (d[0] - th)) != d[1]
                 if err: 
                     E_in += 1/N
             E_in_list_element.append(E_in)
@@ -53,14 +50,20 @@ def decision_stump(d:list):
             min.append(E_in_list[e][2])
     return min
 
-
+N = 2
+tau = 0
 ans = 0
 ans_a = 0
 time = 0
 for iteration in range(count):
     dataSet = []
     for i in range(N):
-        dataSet.append(rd.random() * 2 - 1)
+        record = []
+        record.append(rd.random() * 2 - 1)
+        y = sign(record[0])
+        if (rd.random() < tau): y *= -1
+        record.append(y)
+        dataSet.append(record)
     result = []
     result = decision_stump(dataSet)
     E_out = (1.0 - tau) * 0.5 * abs(float(result[0])) + tau * (1.0 - 0.5 * abs(float(result[0])))
@@ -74,13 +77,19 @@ print("16. |E_out(g, 0) - E_in(g)| = ", ans_a)
 print("\n")
 
 N = 20
+tau = 0
 ans = 0
 ans_a = 0
 time = 0
 for iteration in range(count):
     dataSet = []
     for i in range(N):
-        dataSet.append(rd.random() * 2 - 1)
+        record = []
+        record.append(rd.random() * 2 - 1)
+        y = sign(record[0])
+        if (rd.random() < tau): y *= -1
+        record.append(y)
+        dataSet.append(record)
     result = []
     result = decision_stump(dataSet)
     E_out = (1.0 - tau) * 0.5 * abs(float(result[0])) + tau * (1.0 - 0.5 * abs(float(result[0])))
@@ -89,7 +98,7 @@ for iteration in range(count):
     time += 1
 ans /= count
 ans_a /= count
-print("17. E_out(g, 0) - E_in(g)", ans)
+print("17. E_out(g, 0) - E_in(g) = ", ans)
 print("17. |E_out(g, 0) - E_in(g)| = ", ans_a)
 print("\n")
 
@@ -101,7 +110,12 @@ time = 0
 for iteration in range(count):
     dataSet = []
     for i in range(N):
-        dataSet.append(rd.random() * 2 - 1)
+        record = []
+        record.append(rd.random() * 2 - 1)
+        y = sign(record[0])
+        if (rd.random() < tau): y *= -1
+        record.append(y)
+        dataSet.append(record)
     result = []
     result = decision_stump(dataSet)
     E_out = (1.0 - tau) * 0.5 * abs(float(result[0])) + tau * (1.0 - 0.5 * abs(float(result[0])))
@@ -110,7 +124,7 @@ for iteration in range(count):
     time += 1
 ans /= count
 ans_a /= count
-print("18. E_out(g, 0.1) - E_in(g)", ans)
+print("18. E_out(g, 0.1) - E_in(g) = ", ans)
 print("18. |E_out(g, 0.1) - E_in(g)| = ", ans_a)
 print("\n")
 
@@ -122,7 +136,12 @@ time = 0
 for iteration in range(count):
     dataSet = []
     for i in range(N):
-        dataSet.append(rd.random() * 2 - 1)
+        record = []
+        record.append(rd.random() * 2 - 1)
+        y = sign(record[0])
+        if (rd.random() < tau): y *= -1
+        record.append(y)
+        dataSet.append(record)
     result = []
     result = decision_stump(dataSet)
     E_out = (1.0 - tau) * 0.5 * abs(float(result[0])) + tau * (1.0 - 0.5 * abs(float(result[0])))
@@ -131,7 +150,7 @@ for iteration in range(count):
     time += 1
 ans /= count
 ans_a /= count
-print("19. E_out(g, 0.1) - E_in(g)", ans)
+print("19. E_out(g, 0.1) - E_in(g) = ", ans)
 print("19. |E_out(g, 0.1) - E_in(g)| = ", ans_a)
 print("\n")
 
@@ -143,7 +162,12 @@ time = 0
 for iteration in range(count):
     dataSet = []
     for i in range(N):
-        dataSet.append(rd.random() * 2 - 1)
+        record = []
+        record.append(rd.random() * 2 - 1)
+        y = sign(record[0])
+        if (rd.random() < tau): y *= -1
+        record.append(y)
+        dataSet.append(record)
     result = []
     result = decision_stump(dataSet)
     E_out = (1.0 - tau) * 0.5 * abs(float(result[0])) + tau * (1.0 - 0.5 * abs(float(result[0])))
@@ -152,6 +176,6 @@ for iteration in range(count):
     time += 1
 ans /= count
 ans_a /= count
-print("20. E_out(g, 0.1) - E_in(g)", ans)
+print("20. E_out(g, 0.1) - E_in(g) = ", ans)
 print("20. |E_out(g, 0.1) - E_in(g)| = ", ans_a)
 print("\n")
